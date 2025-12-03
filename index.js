@@ -28,6 +28,13 @@ async function run() {
     try {
         const db = client.db(process.env.DB_NAME);
 
+        const reviewsCollection = db.collection("reviews");
+        const favoritesCollection = db.collection("favorites");
+
+        app.get("/", (req, res) => {
+            res.send("Local Food Lovers API is running")
+        });
+
         await client.db("admin").command({ ping: 1 });
         console.log("MongoDB connected successfully");
 
