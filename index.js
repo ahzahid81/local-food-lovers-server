@@ -35,6 +35,43 @@ async function run() {
             res.send("Local Food Lovers API is running")
         });
 
+
+        app.post("/reviews", async (req, res) => {
+            try{
+                const review = req.body;
+
+                const result = await reviewsCollection.insertOne(review);
+                res.send(result);
+            }catch(error){
+                res.status(500).send({message: "Failed to add review", error: error.message })
+            }
+        });
+
+        app.get("/reviews", async(req, res) => {
+            try{
+                const search = req.query.search || "";
+                let query = {};
+
+                if(search){
+                    query = {
+                        foodName: {
+                            $regex: search,
+                            $options: "i",
+                        },
+                    };
+                }
+
+                const cursor = reviewsCollection
+                .find(query)
+                .sort({createdAt: -1});
+
+                const result = await cursor.toArray();
+                res.send(result);
+            } catch(error){
+                res.status(500).send({ message: "Failed to get reviews", error: error.message });
+            }
+        });
+
         await client.db("admin").command({ ping: 1 });
         console.log("MongoDB connected successfully");
 
