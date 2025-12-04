@@ -40,9 +40,7 @@ async function run() {
             res.send("Local Food Lovers API is running");
         });
 
-        /* ==========================
-           REVIEWS ROUTES (CRUD)
-           ========================== */
+
 
         // Add a review (POST)
         app.post("/reviews", async (req, res) => {
@@ -137,8 +135,6 @@ async function run() {
         // Update review (PUT)
 
 
-        // ...
-
         app.get("/reviews/:id", async (req, res) => {
             try {
                 const id = req.params.id;
@@ -187,17 +183,10 @@ async function run() {
             }
         });
 
-        /* ==========================
-           FAVORITES ROUTES
-           ========================== */
-
-        // Add to favorites
+       
         app.post("/favorites", async (req, res) => {
             try {
                 const fav = req.body;
-                // Should contain: reviewId, foodName, foodImage, restaurantName, location, rating, userEmail, createdAt
-
-                // Optional: prevent duplicates (same user + same review)
                 const exists = await favoritesCollection.findOne({
                     reviewId: fav.reviewId,
                     userEmail: fav.userEmail,
@@ -214,7 +203,6 @@ async function run() {
             }
         });
 
-        // Get favorites by user email
         app.get("/favorites", async (req, res) => {
             try {
                 const email = req.query.email;
@@ -234,7 +222,7 @@ async function run() {
             }
         });
 
-        // Remove favorite (optional)
+
         app.delete("/favorites/:id", async (req, res) => {
             try {
                 const id = req.params.id;
@@ -246,7 +234,6 @@ async function run() {
             }
         });
 
-        // Connect to MongoDB once
         await client.db("admin").command({ ping: 1 });
         console.log("MongoDB connected successfully");
 
