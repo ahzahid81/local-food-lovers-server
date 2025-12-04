@@ -136,19 +136,29 @@ async function run() {
 
         // Update review (PUT)
 
+
+        // ...
+
         app.get("/reviews/:id", async (req, res) => {
             try {
                 const id = req.params.id;
+                console.log("GET /reviews/:id ->", id);
 
                 let query;
 
                 if (ObjectId.isValid(id)) {
-                    query = { _id: new ObjectId(id) };
+                    query = {
+                        $or: [
+                            { _id: new ObjectId(id) },
+                            { _id: id },               
+                        ],
+                    };
                 } else {
                     query = { _id: id };
                 }
 
                 const review = await reviewsCollection.findOne(query);
+                console.log("Found review:", review?._id);
 
                 if (!review) {
                     return res.status(404).send({ message: "Review not found" });
@@ -162,6 +172,7 @@ async function run() {
                     .send({ message: "Failed to get review", error: error.message });
             }
         });
+
 
 
         // Delete review
