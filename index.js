@@ -13,7 +13,7 @@ const corsOptions = {
     origin: [
         "http://localhost:5173",
         "http://localhost:5174",
-        "https://local-food-lovers-client.web.app",
+        "https://foodie-circle.web.app",
         // Add your production frontend URL here once deployed
         process.env.CLIENT_URL 
     ].filter(Boolean), // This removes undefined values if env is missing
